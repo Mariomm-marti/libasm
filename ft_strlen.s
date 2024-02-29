@@ -7,14 +7,14 @@
 ft_strlen:
         xor     rax, rax
         cmp     rdi, 0x0
-        je      end
+        je      _ft_strlen_end
 
-count_char:
+_ft_strlen_count_char:
         cmp     byte [rdi], 0x0
-        je      end
+        je      _ft_strlen_end
         inc     rdi
         inc     rax
-        jmp     count_char
+        jmp     _ft_strlen_count_char
 
-end:
+_ft_strlen_end:
         ret
