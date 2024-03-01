@@ -5,9 +5,6 @@
 
         section .text
 ft_strcmp:
-        mov     rax, 0
-        
-compare_loop:
         cmp     byte [rdi], 0x0
         je      end
         mov     r8b, byte [rdi]
@@ -15,7 +12,7 @@ compare_loop:
         jne     end
         inc     rdi
         inc     rsi
-        jmp     compare_loop
+        jmp     ft_strcmp
 
 end:
         mov     r8b, byte [rdi]
