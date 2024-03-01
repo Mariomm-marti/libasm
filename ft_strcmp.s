@@ -12,20 +12,13 @@ compare_loop:
         je      end
         mov     r8b, byte [rdi]
         cmp     byte [rsi], r8b
-        jg      end_small
-        jl      end_big
+        jne     end
         inc     rdi
         inc     rsi
         jmp     compare_loop
 
 end:
-        mov     rax, 0
-        ret
-
-end_big:
-        mov     rax, 1
-        ret
-
-end_small:
-        mov     rax, -1
+        mov     r8b, byte [rdi]
+        sub     r8b, byte [rsi]
+        movsx   rax, r8b
         ret

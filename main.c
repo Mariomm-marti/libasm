@@ -4,6 +4,7 @@
 
 extern size_t ft_strlen(char const *str);
 extern char *ft_strcpy(char *dst, char const *src);
+extern int ft_strcmp(const char *s1, const char *s2);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -37,7 +38,34 @@ void test_strcpy(void) {
   puts("[ft_strcpy] OK!");
 }
 
+void test_strcmp(void) {
+  {
+    char a[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    char b[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    assert(ft_strcmp(a, b) == 0);
+  }
+  {
+    char a[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    char b[6] = {'H', 'E', 'l', 'l', 'o', '\0'};
+    assert(ft_strcmp(a, b) == 32);
+  }
+  { assert(ft_strcmp("", "") == 0); }
+  {
+    char a[6] = {'H', 'E', 'l', 'l', 'o', '\0'};
+    char b[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    assert(ft_strcmp(a, b) == -32);
+  }
+  {
+    char a[6] = {'H', '\x69', 'l', 'l', 'o', '\0'};
+    char b[6] = {'H', '\x69', 'l', 'l', 'o', '\0'};
+    assert(ft_strcmp(a, b) == 0);
+  }
+  { assert(ft_strcmp("\x00\x00\x00", "") == 0); }
+  puts("[ft_strcmp] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
+  test_strcmp();
 }
