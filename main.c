@@ -1,10 +1,13 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/errno.h>
 
 extern size_t ft_strlen(char const *str);
 extern char *ft_strcpy(char *dst, char const *src);
 extern int ft_strcmp(const char *s1, const char *s2);
+extern int ft_strcmp(const char *s1, const char *s2);
+extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -64,8 +67,22 @@ void test_strcmp(void) {
   puts("[ft_strcmp] OK!");
 }
 
+void test_write(void) {
+  {
+    assert(ft_write(-1, "Hey!\n", 5) == -1);
+    assert(errno == EBADF);
+  }
+  errno = 0;
+  {
+    assert(ft_write(2, "STDERR works!\n", 14) == 14);
+    assert(errno == 0);
+  }
+  puts("[ft_write] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
   test_strcmp();
+  test_write();
 }
