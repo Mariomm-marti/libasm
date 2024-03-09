@@ -106,6 +106,7 @@ void test_read(void) {
     assert(strcmp(buff, buff2) == 0);
     close(fd);
   }
+  puts("[ft_read] OK!");
 }
 
 int main(void) {
