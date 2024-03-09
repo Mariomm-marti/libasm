@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/errno.h>
 #include <unistd.h>
@@ -12,6 +13,7 @@ extern int ft_strcmp(const char *s1, const char *s2);
 extern int ft_strcmp(const char *s1, const char *s2);
 extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
 extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
+extern char *ft_strdup(const char *s1);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -81,6 +83,7 @@ void test_write(void) {
     assert(ft_write(2, "testing in progress...!\n", 24) == 24);
     assert(errno == 0);
   }
+  errno = 0;
   puts("[ft_write] OK!");
 }
 
@@ -89,13 +92,19 @@ void test_read(void) {
     assert(ft_read(-1, NULL, 0) == -1);
     assert(errno = EBADF);
   }
-  { assert(ft_read(-1, NULL, 10) == -1); }
+  errno = 0;
+  {
+    assert(ft_read(-1, NULL, 10) == -1);
+    assert(errno = EBADF);
+  }
+  errno = 0;
   {
     int fd = open("ft_read.s", O_RDONLY);
 
     assert(ft_read(fd, NULL, 10) == -1);
     close(fd);
   }
+  errno = 0;
   {
     int fd = open("main.c", O_RDONLY);
     char buff[11];
@@ -106,7 +115,39 @@ void test_read(void) {
     assert(strcmp(buff, buff2) == 0);
     close(fd);
   }
+  errno = 0;
   puts("[ft_read] OK!");
+}
+
+void test_strdup(void) {
+  {
+    char *src = "This is a simple strdup attempt.";
+    char *dst;
+
+    dst = ft_strdup(src);
+    assert(strlen(dst) == strlen(src));
+    assert(strcmp(dst, src) == 0);
+    free(dst);
+  }
+  {
+    char *src = "";
+    char *dst;
+
+    dst = ft_strdup(src);
+    assert(strlen(dst) == strlen(src));
+    assert(strcmp(dst, src) == 0);
+    free(dst);
+  }
+  {
+    char *src = NULL;
+    char *dst;
+
+    dst = ft_strdup(src);
+    assert(strlen(dst) == strlen(src));
+    assert(strcmp(dst, src) == 0);
+    free(dst);
+  }
+  puts("[ft_strdup] OK!");
 }
 
 int main(void) {
@@ -115,4 +156,5 @@ int main(void) {
   test_strcmp();
   test_write();
   test_read();
+  test_strdup();
 }
