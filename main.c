@@ -1,13 +1,17 @@
+// Testing read!
 #include <assert.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/errno.h>
+#include <unistd.h>
 
 extern size_t ft_strlen(char const *str);
 extern char *ft_strcpy(char *dst, char const *src);
 extern int ft_strcmp(const char *s1, const char *s2);
 extern int ft_strcmp(const char *s1, const char *s2);
 extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
+extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -74,10 +78,34 @@ void test_write(void) {
   }
   errno = 0;
   {
-    assert(ft_write(2, "STDERR works!\n", 14) == 14);
+    assert(ft_write(2, "testing in progress...!\n", 24) == 24);
     assert(errno == 0);
   }
   puts("[ft_write] OK!");
+}
+
+void test_read(void) {
+  {
+    assert(ft_read(-1, NULL, 0) == -1);
+    assert(errno = EBADF);
+  }
+  { assert(ft_read(-1, NULL, 10) == -1); }
+  {
+    int fd = open("ft_read.s", O_RDONLY);
+
+    assert(ft_read(fd, NULL, 10) == -1);
+    close(fd);
+  }
+  {
+    int fd = open("main.c", O_RDONLY);
+    char buff[11];
+    char buff2[11] = "// Testing\0";
+
+    buff[10] = 0;
+    assert(ft_read(fd, buff, 10) == 10);
+    assert(strcmp(buff, buff2) == 0);
+    close(fd);
+  }
 }
 
 int main(void) {
@@ -85,4 +113,5 @@ int main(void) {
   test_strcpy();
   test_strcmp();
   test_write();
+  test_read();
 }
