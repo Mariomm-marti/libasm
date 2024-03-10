@@ -138,15 +138,6 @@ void test_strdup(void) {
     assert(strcmp(dst, src) == 0);
     free(dst);
   }
-  {
-    char *src = NULL;
-    char *dst;
-
-    dst = ft_strdup(src);
-    assert(strlen(dst) == strlen(src));
-    assert(strcmp(dst, src) == 0);
-    free(dst);
-  }
   puts("[ft_strdup] OK!");
 }
 
