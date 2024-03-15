@@ -7,6 +7,11 @@
 #include <sys/errno.h>
 #include <unistd.h>
 
+typedef struct s_list {
+  void *data;
+  struct s_list *next;
+} t_list;
+
 extern size_t ft_strlen(char const *str);
 extern char *ft_strcpy(char *dst, char const *src);
 extern int ft_strcmp(const char *s1, const char *s2);
@@ -14,6 +19,7 @@ extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
 extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
 extern char *ft_strdup(const char *s1);
 extern int ft_atoi_base(char *str, char *base);
+extern int ft_list_size(t_list *begin_list);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -163,6 +169,23 @@ void test_atoi_base(void) {
   puts("[ft_atoi_base] OK!");
 }
 
+void test_list_size(void) {
+  { assert(0 == ft_list_size(NULL)); }
+  {
+    t_list head = {0, 0};
+    assert(1 == ft_list_size(&head));
+  }
+  {
+    t_list last = {0, 0};
+    t_list second = {0, &last};
+    t_list first = {0, &second};
+    t_list head = {0, &first};
+
+    assert(4 == ft_list_size(&head));
+  }
+  puts("[ft_list_size] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
@@ -171,4 +194,5 @@ int main(void) {
   test_read();
   test_strdup();
   test_atoi_base();
+  test_list_size();
 }
