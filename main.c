@@ -13,6 +13,7 @@ extern int ft_strcmp(const char *s1, const char *s2);
 extern ssize_t ft_write(int fildes, const void *buf, size_t nbyte);
 extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
 extern char *ft_strdup(const char *s1);
+extern int ft_atoi_base(char *str, char *base);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -140,6 +141,28 @@ void test_strdup(void) {
   puts("[ft_strdup] OK!");
 }
 
+void test_atoi_base(void) {
+  { assert(0 == ft_atoi_base("", "")); }
+  { assert(0 == ft_atoi_base("", "0123456789")); }
+  { assert(0 == ft_atoi_base("100", "")); }
+  { assert(0 == ft_atoi_base("100", "012345-6789")); }
+  { assert(0 == ft_atoi_base("100", "012345+6789")); }
+  { assert(100 == ft_atoi_base("100", "0123456789")); }
+  { assert(100 == ft_atoi_base("100abc10000", "0123456789")); }
+  { assert(-100 == ft_atoi_base("-100", "0123456789")); }
+  { assert(1 == ft_atoi_base("          1", "0132456789")); }
+  { assert(-1 == ft_atoi_base("        -1", "0132456789")); }
+  { assert(-1 == ft_atoi_base("      ---1", "0132456789")); }
+  { assert(-100 == ft_atoi_base("  ---100", "0132456789")); }
+  { assert(-100 == ft_atoi_base("  ---100", "0132456789")); }
+  { assert(100 == ft_atoi_base("   +++100", "0132456789")); }
+  { assert(-100 == ft_atoi_base("   +-+100", "0132456789")); }
+  { assert(-171 == ft_atoi_base("-ab", "0132456789abcdef")); }
+  { assert(-171 == ft_atoi_base("-ab", "0132456789abcdef")); }
+  { assert(-0xfabada == ft_atoi_base("-fabada", "0132456789abcdef")); }
+  puts("[ft_atoi_base] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
@@ -147,4 +170,5 @@ int main(void) {
   test_write();
   test_read();
   test_strdup();
+  test_atoi_base();
 }
