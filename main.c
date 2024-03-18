@@ -20,6 +20,8 @@ extern ssize_t ft_read(int fildes, void *buf, size_t nbyte);
 extern char *ft_strdup(const char *s1);
 extern int ft_atoi_base(char *str, char *base);
 extern int ft_list_size(t_list *begin_list);
+extern void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(),
+                              void (*free_fct)(void *));
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -186,6 +188,149 @@ void test_list_size(void) {
   puts("[ft_list_size] OK!");
 }
 
+int test_list_remove_if_compare_always_same(void *d1, void *d2) {
+  (void)d1, (void)d2;
+  return 0;
+}
+
+int test_list_remove_if_compare_always_different(void *d1, void *d2) {
+  (void)d1, (void)d2;
+  return 1;
+}
+
+void test_list_remove_if(void) {
+  {
+    t_list *lst = NULL;
+    ft_list_remove_if(&lst, NULL, NULL, NULL);
+  }
+  {
+    t_list *lst = malloc(sizeof(t_list));
+    lst->data = NULL;
+    lst->next = NULL;
+
+    ft_list_remove_if(&lst, NULL, test_list_remove_if_compare_always_same,
+                      free);
+    assert(lst == NULL);
+  }
+  {
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    second->data = NULL;
+    second->next = NULL;
+    lst->data = NULL;
+    lst->next = second;
+
+    ft_list_remove_if(&lst, NULL, test_list_remove_if_compare_always_same,
+                      free);
+    assert(lst == NULL);
+  }
+  {
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    second->data = strdup("Test");
+    second->next = NULL;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, "Test", test_list_remove_if_compare_always_same,
+                      free);
+    assert(lst == NULL);
+  }
+  {
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    second->data = strdup("Test");
+    second->next = NULL;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, "Test",
+                      test_list_remove_if_compare_always_different, free);
+    assert(strcmp(lst->data, "Hey") == 0);
+    assert(lst->next == second);
+    assert(lst->next->data == second->data);
+    assert(lst->next->next == second->next);
+    free(lst->next->data);
+    free(lst->next);
+    free(lst->data);
+    free(lst);
+  }
+  {
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    second->data = strdup("Test");
+    second->next = NULL;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, "Hey", strcmp, free);
+    assert(lst != NULL);
+    assert(lst->next == NULL);
+    assert(strcmp(lst->data, "Test") == 0);
+    free(second->data);
+    free(second);
+  }
+  {
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    second->data = strdup("Test");
+    second->next = NULL;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, "Test", strcmp, free);
+    assert(lst != NULL);
+    assert(lst->next == NULL);
+    assert(strcmp(lst->data, "Hey") == 0);
+    free(lst->data);
+    free(lst);
+  }
+  {
+    t_list *fourth = malloc(sizeof(t_list));
+    t_list *third = malloc(sizeof(t_list));
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    fourth->data = strdup("World");
+    fourth->next = NULL;
+    third->data = strdup("Lol");
+    third->next = fourth;
+    second->data = strdup("Test");
+    second->next = third;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, NULL, test_list_remove_if_compare_always_same,
+                      free);
+    assert(lst == NULL);
+  }
+  {
+    t_list *fourth = malloc(sizeof(t_list));
+    t_list *third = malloc(sizeof(t_list));
+    t_list *second = malloc(sizeof(t_list));
+    t_list *lst = malloc(sizeof(t_list));
+    fourth->data = strdup("World");
+    fourth->next = NULL;
+    third->data = strdup("Lol");
+    third->next = fourth;
+    second->data = strdup("Test");
+    second->next = third;
+    lst->data = strdup("Hey");
+    lst->next = second;
+
+    ft_list_remove_if(&lst, "Test", strcmp, free);
+    assert(lst->next == third);
+    assert(third->next == fourth);
+    assert(strcmp(third->data, "Lol") == 0);
+    free(fourth->data);
+    free(fourth);
+    free(third->data);
+    free(third);
+    free(lst->data);
+    free(lst);
+  }
+  puts("[ft_list_remove_if] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
@@ -195,4 +340,5 @@ int main(void) {
   test_strdup();
   test_atoi_base();
   test_list_size();
+  test_list_remove_if();
 }
