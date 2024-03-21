@@ -23,6 +23,7 @@ extern int ft_list_size(t_list *begin_list);
 extern void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(),
                               void (*free_fct)(void *));
 extern void ft_list_push_front(t_list **begin_list, void *data);
+extern void ft_list_sort(t_list **begin_list, int (*cmp)());
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -361,6 +362,41 @@ void test_list_push_front(void) {
   puts("[ft_list_push_front] OK!");
 }
 
+void test_list_sort(void) {
+  {
+    t_list fourth = {"bbb", NULL};
+    t_list third = {"ccc", &fourth};
+    t_list second = {"ddd", &third};
+    t_list first = {"aaa", &second};
+    t_list *new = &first;
+
+    ft_list_sort(&new, strcmp);
+    assert(new->data == &"aaa");
+    assert(new->next->data == &"bbb");
+    assert(new->next->next->data == &"ccc");
+    assert(new->next->next->next->data == &"ddd");
+  }
+  {
+    t_list second = {"aaa", NULL};
+    t_list first = {"aaa", &second};
+    t_list *new = &first;
+
+    ft_list_sort(&new, strcmp);
+    assert(new->data == &"aaa");
+    assert(new->next->data == &"aaa");
+  }
+  {
+    t_list second = {"aaa", NULL};
+    t_list first = {"bbb", &second};
+    t_list *new = &first;
+
+    ft_list_sort(NULL, strcmp);
+    assert(new->data == &"bbb");
+    assert(new->next->data == &"aaa");
+  }
+  puts("[ft_list_sort] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
@@ -372,4 +408,6 @@ int main(void) {
   test_list_size();
   test_list_remove_if();
   test_list_push_front();
+  test_list_sort();
+  puts("------- ALL TESTS OK -------");
 }
