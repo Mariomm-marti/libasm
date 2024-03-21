@@ -6,6 +6,8 @@
 ; rsi -> allocated data ready to be placed in a node at the beginning
 ; r8  -> first node of linked list as t_list *
 ft_list_push_front:
+        cmp     rdi, 0
+        je      ret
         push    rdi
         push    rsi
         mov     rdi, nodesize
