@@ -22,6 +22,7 @@ extern int ft_atoi_base(char *str, char *base);
 extern int ft_list_size(t_list *begin_list);
 extern void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(),
                               void (*free_fct)(void *));
+extern void ft_list_push_front(t_list **begin_list, void *data);
 
 void test_strlen(void) {
   assert(ft_strlen(NULL) == 0);
@@ -331,6 +332,35 @@ void test_list_remove_if(void) {
   puts("[ft_list_remove_if] OK!");
 }
 
+void test_list_push_front(void) {
+  {
+    t_list *new = NULL;
+
+    assert(new == NULL);
+  }
+  {
+    t_list *new = NULL;
+
+    ft_list_push_front(&new, "Test");
+    assert(strcmp(new->data, "Test") == 0);
+    assert(new->next == NULL);
+    free(new);
+  }
+  {
+    t_list *new = NULL;
+
+    ft_list_push_front(&new, "Test");
+    ft_list_push_front(&new, "Random");
+    assert(strcmp(new->data, "Random") == 0);
+    assert(strcmp(new->next->data, "Test") == 0);
+    assert(new->next != NULL);
+    assert(new->next->next == NULL);
+    free(new->next);
+    free(new);
+  }
+  puts("[ft_list_push_front] OK!");
+}
+
 int main(void) {
   test_strlen();
   test_strcpy();
@@ -341,4 +371,5 @@ int main(void) {
   test_atoi_base();
   test_list_size();
   test_list_remove_if();
+  test_list_push_front();
 }

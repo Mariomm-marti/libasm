@@ -10,7 +10,8 @@ SRCS  = ft_read.s \
 				ft_write.s \
 				ft_atoi_base.s \
 				ft_list_size.s \
-				ft_list_remove_if.s
+				ft_list_remove_if.s \
+				ft_list_push_front.s
 OBJS  = $(SRCS:.s=.o)
 OBJM  = $(TESTM:.c=.o)
 
