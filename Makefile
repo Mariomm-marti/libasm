@@ -27,7 +27,7 @@ all:    $(LIB)
 
 test:   $(LIB)
 	      /usr/bin/cc -Wall -Werror -Wextra -Wpedantic \
-	      	-z noexecstack -fsanitize=address -no-pie \
+	      	-z noexecstack -fsanitize=address \
 	      	$(TESTM) $(OBJS) -o $(TEST)
 	      ./$(TEST)
 

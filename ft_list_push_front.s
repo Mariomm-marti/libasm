@@ -11,7 +11,7 @@ ft_list_push_front:
         push    rdi
         push    rsi
         mov     rdi, nodesize
-        call    malloc ; malloc node size (16 bytes)
+        call    malloc wrt ..plt; malloc node size (16 bytes)
         pop     rsi
         pop     rdi
         cmp     rax, 0 ; malloc error

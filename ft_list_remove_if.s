@@ -43,7 +43,7 @@ loop:
         call    r15 ; free current node data
         pop     rdx
         mov     rdi, rdx ; free current node
-        call    free
+        call    free wrt ..plt
         pop     rcx
         mov     rdx, qword [ rcx + nodenext ] ; not change previous only current
         jmp     loop
@@ -64,7 +64,7 @@ loop_free_head:
         mov     rdi, rdx
         push    rcx
         push    rdx
-        call    free
+        call    free wrt ..plt
         pop     rdx
         pop     rcx
         mov     rdx, qword [ r12 ]

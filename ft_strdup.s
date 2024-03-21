@@ -12,7 +12,7 @@ ft_strdup:
         call    ft_strlen
         mov     rdi, rax
         inc     rdi
-        call    malloc
+        call    malloc wrt ..plt
         cmp     rax, 0
         je      exit
         pop     rsi
