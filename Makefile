@@ -28,7 +28,7 @@ all:    $(LIB)
 test:   $(LIB)
 	      /usr/bin/cc -Wall -Werror -Wextra -Wpedantic \
 	      	-z noexecstack -fsanitize=address \
-	      	$(TESTM) $(OBJS) -o $(TEST)
+	        $(TESTM) -L. -lasm -o $(TEST)
 	      ./$(TEST)
 
 clean:
