@@ -100,12 +100,12 @@ void test_write(void) {
 void test_read(void) {
   {
     assert(ft_read(-1, NULL, 0) == -1);
-    assert(errno = EBADF);
+    assert(errno == EBADF);
   }
   errno = 0;
   {
     assert(ft_read(-1, NULL, 10) == -1);
-    assert(errno = EBADF);
+    assert(errno == EBADF);
   }
   errno = 0;
   {
